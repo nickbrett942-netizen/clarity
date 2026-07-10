@@ -9,10 +9,6 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Playfair+Display:wght@700&amp;display=swap');
         
-        :root {
-            --gold: #d4af37;
-        }
-        
         body {
             font-family: 'Inter', system_ui, sans-serif;
         }
@@ -29,61 +25,34 @@
             box-shadow: 0 0 60px -15px rgb(212 175 55 / 0.3);
         }
 
-        .key-card {
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        .modal {
+            animation: fadeInModal 0.3s ease forwards;
         }
         
-        .key-card:hover {
-            transform: translateY(-12px) scale(1.03);
-            box-shadow: 0 40px 80px -20px rgb(0 0 0 / 0.6);
-        }
-
-        .nav-link {
-            position: relative;
-        }
-        
-        .nav-link:after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: -4px;
-            left: 0;
-            background-color: var(--gold);
-            transition: width 0.3s ease;
-        }
-        
-        .nav-link:hover:after {
-            width: 100%;
-        }
-
-        .buy-btn {
-            background: linear-gradient(90deg, #d4af37, #f0d47a);
-            color: #111;
-            font-weight: 700;
-            letter-spacing: 0.5px;
+        @keyframes fadeInModal {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
         }
     </style>
 </head>
 <body class="bg-black text-white overflow-x-hidden">
     <!-- Navbar -->
-    <nav class="fixed top-0 left-0 right-0 z-50 border-b border-white/10 bg-black/80 backdrop-blur-lg">
+    <nav class="fixed top-0 left-0 right-0 z-50 border-b border-white/10 bg-black/90 backdrop-blur-lg">
         <div class="max-w-7xl mx-auto px-8 py-6 flex items-center justify-between">
             <div class="flex items-center gap-x-3">
                 <div class="w-9 h-9 rounded-2xl bg-gradient-to-br from-amber-400 to-yellow-600 flex items-center justify-center text-black font-bold text-2xl">C</div>
                 <span class="heading-font text-3xl tracking-tighter">Clarity</span>
             </div>
             
-            <div class="hidden md:flex items-center gap-x-10 text-sm font-medium">
-                <a href="#" class="nav-link">Keys</a>
-                <a href="#" class="nav-link">Why Clarity</a>
-                <a href="#" class="nav-link">Guarantee</a>
-            </div>
-            
-            <div class="flex items-center gap-x-4">
-                <div class="text-xs uppercase tracking-widest border border-white/30 px-4 py-2 rounded-full">
-                    INSTANT DELIVERY
-                </div>
+            <div class="flex items-center gap-x-6">
+                <button onclick="showLoginModal()" id="loginBtn"
+                        class="px-6 py-2.5 text-sm font-medium border border-white/30 hover:border-amber-400 rounded-2xl transition">
+                    <i class="fa-brands fa-google mr-2"></i> Sign in
+                </button>
+                <button onclick="showAdminPanel()" 
+                        class="hidden px-5 py-2 text-xs uppercase tracking-widest border border-red-500/30 text-red-400 hover:bg-red-950 rounded-2xl" id="adminBtn">
+                    Admin
+                </button>
             </div>
         </div>
     </nav>
@@ -92,241 +61,283 @@
     <section class="hero-bg min-h-screen flex items-center pt-20">
         <div class="max-w-7xl mx-auto px-8 grid md:grid-cols-2 gap-16 items-center">
             <div class="space-y-8">
-                <div class="inline-flex items-center gap-x-2 bg-white/5 border border-white/10 rounded-3xl px-6 py-2 text-sm">
-                    <i class="fa-solid fa-shield-halved text-emerald-400"></i>
-                    <span class="font-medium">Premium • Verified • Secure</span>
-                </div>
-                
                 <h1 class="heading-font text-7xl md:text-8xl leading-none tracking-tighter">
                     LUXURY KEYS.<br>
                     <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-yellow-400 to-amber-500">INSTANT ACCESS.</span>
                 </h1>
                 
-                <p class="text-2xl text-gray-400 max-w-md">
-                    Clean, reliable activation keys delivered in seconds. 
-                    Trusted by thousands.
-                </p>
-                
-                <div class="flex items-center gap-x-8">
-                    <div>
-                        <div class="text-5xl font-semibold">$3</div>
-                        <div class="text-sm text-gray-400 tracking-widest">PER KEY</div>
-                    </div>
-                    <div class="h-12 w-px bg-white/20"></div>
-                    <div class="flex items-center gap-x-6 text-sm">
-                        <div class="flex items-center gap-x-2">
-                            <i class="fa-solid fa-check text-emerald-400"></i>
-                            <span>Instant Delivery</span>
-                        </div>
-                        <div class="flex items-center gap-x-2">
-                            <i class="fa-solid fa-check text-emerald-400"></i>
-                            <span>24/7 Support</span>
-                        </div>
-                    </div>
-                </div>
+                <p class="text-2xl text-gray-400">Premium activation keys for just $3.</p>
 
-                <button onclick="buyKey()" 
-                        class="buy-btn px-12 py-6 rounded-3xl text-xl flex items-center gap-x-4 group">
-                    BUY KEY FOR $3
-                    <i class="fa-solid fa-arrow-right group-active:translate-x-2 transition"></i>
+                <button onclick="startPurchase()" 
+                        class="buy-btn px-12 py-6 rounded-3xl text-xl flex items-center gap-x-4 group bg-gradient-to-r from-amber-400 to-yellow-400 text-black font-bold">
+                    BUY KEY • $3
+                    <i class="fa-solid fa-arrow-right"></i>
                 </button>
-                
-                <div class="flex items-center gap-x-8 text-xs uppercase tracking-widest text-gray-500">
-                    <div class="flex items-center gap-x-2">
-                        <i class="fa-solid fa-lock"></i>
-                        SECURE CHECKOUT
-                    </div>
-                    <div>POWERED BY JUNKIE</div>
-                </div>
             </div>
 
-            <!-- Product Visual -->
             <div class="relative">
                 <div class="key-card bg-zinc-950 border border-white/10 rounded-3xl p-8 luxury-glow">
-                    <div class="aspect-video bg-gradient-to-br from-zinc-900 to-black rounded-2xl flex items-center justify-center border border-white/5 mb-8">
-                        <div class="text-center">
-                            <i class="fa-solid fa-key text-8xl text-amber-400/80 mb-4"></i>
-                            <div class="text-amber-400 font-mono text-2xl tracking-[4px]">XXXX-XXXX-XXXX</div>
+                    <div class="aspect-video bg-gradient-to-br from-zinc-900 to-black rounded-2xl flex items-center justify-center">
+                        <i class="fa-solid fa-key text-8xl text-amber-400/80"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Checkout Modal -->
+    <div id="checkoutModal" class="hidden fixed inset-0 bg-black/90 flex items-center justify-center z-[100]">
+        <div class="modal bg-zinc-950 border border-white/10 rounded-3xl max-w-md w-full mx-4 overflow-hidden">
+            <div class="p-8">
+                <div class="flex justify-between items-center mb-8">
+                    <h2 class="text-3xl heading-font">Checkout</h2>
+                    <button onclick="closeModal()" class="text-gray-400 hover:text-white">
+                        <i class="fa-solid fa-xmark text-2xl"></i>
+                    </button>
+                </div>
+
+                <!-- Step 1: Login -->
+                <div id="step-login" class="step">
+                    <p class="text-center text-gray-400 mb-6">Sign in to continue</p>
+                    <button onclick="mockGoogleLogin()" 
+                            class="w-full py-6 bg-white text-black rounded-2xl font-semibold flex items-center justify-center gap-x-3 hover:bg-gray-100">
+                        <i class="fa-brands fa-google text-xl"></i>
+                        Continue with Google
+                    </button>
+                    <p class="text-xs text-center text-gray-500 mt-4">Demo login for showcase</p>
+                </div>
+
+                <!-- Step 2: Info -->
+                <div id="step-info" class="step hidden">
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">Email</label>
+                            <input id="email" type="email" value="demo@claritykeys.com" 
+                                   class="w-full bg-zinc-900 border border-white/10 rounded-2xl px-5 py-4 focus:outline-none focus:border-amber-400">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">Key Type</label>
+                            <select id="keyType" class="w-full bg-zinc-900 border border-white/10 rounded-2xl px-5 py-4 focus:outline-none focus:border-amber-400">
+                                <option value="Premium">Premium Activation Key - $3</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button onclick="nextStep()" 
+                            class="mt-8 w-full py-6 bg-gradient-to-r from-amber-400 to-yellow-400 text-black rounded-2xl font-bold text-lg">
+                        CONTINUE TO PAYMENT
+                    </button>
+                </div>
+
+                <!-- Step 3: Payment -->
+                <div id="step-payment" class="step hidden">
+                    <div class="bg-black/50 border border-white/10 rounded-2xl p-6 mb-8">
+                        <div class="flex justify-between mb-4">
+                            <span class="text-gray-400">Total</span>
+                            <span class="text-3xl font-semibold">$3.00</span>
+                        </div>
+                        <div class="text-xs text-emerald-400 flex items-center gap-x-2">
+                            <i class="fa-solid fa-circle-check"></i>
+                            SECURE CHECKOUT VIA JUNKIE
                         </div>
                     </div>
                     
-                    <div class="space-y-6">
-                        <div class="flex justify-between items-center">
-                            <div class="text-gray-400">Product</div>
-                            <div class="font-medium">Premium Activation Key</div>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <div class="text-gray-400">Price</div>
-                            <div class="text-3xl font-semibold">$3.00</div>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <div class="text-gray-400">Delivery</div>
-                            <div class="text-emerald-400 font-medium">Instant</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Trust badges -->
-                <div class="absolute -bottom-6 -right-6 bg-zinc-900 border border-white/10 rounded-2xl p-6 flex gap-x-8 text-xs">
-                    <div class="flex items-center gap-x-2">
-                        <i class="fa-solid fa-star text-yellow-400"></i>
-                        <span>4.98</span>
-                    </div>
-                    <div class="h-4 w-px bg-white/10"></div>
-                    <div>10k+ Sold</div>
+                    <button onclick="completePurchase()" 
+                            class="w-full py-7 bg-gradient-to-r from-emerald-400 to-teal-400 text-black rounded-3xl font-bold text-xl flex items-center justify-center gap-x-3">
+                        <i class="fa-solid fa-credit-card"></i>
+                        PAY $3 SECURELY
+                    </button>
+                    
+                    <p class="text-center text-xs text-gray-500 mt-6">Your key will be sent instantly after payment</p>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
-    <!-- Features -->
-    <section class="py-24 border-t border-white/10 bg-zinc-950">
-        <div class="max-w-7xl mx-auto px-8">
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="bg-black border border-white/5 rounded-3xl p-10">
-                    <i class="fa-solid fa-bolt text-4xl text-amber-400 mb-6"></i>
-                    <h3 class="text-2xl font-medium mb-3">Lightning Delivery</h3>
-                    <p class="text-gray-400">Your key is generated and sent instantly after purchase.</p>
-                </div>
-                <div class="bg-black border border-white/5 rounded-3xl p-10">
-                    <i class="fa-solid fa-shield-halved text-4xl text-amber-400 mb-6"></i>
-                    <h3 class="text-2xl font-medium mb-3">Guaranteed Working</h3>
-                    <p class="text-gray-400">Every key is tested. If it doesn't work, you get a free replacement.</p>
-                </div>
-                <div class="bg-black border border-white/5 rounded-3xl p-10">
-                    <i class="fa-solid fa-headset text-4xl text-amber-400 mb-6"></i>
-                    <h3 class="text-2xl font-medium mb-3">24/7 Support</h3>
-                    <p class="text-gray-400">Real humans ready to help you activate your key.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Testimonials -->
-    <section class="py-20 bg-black">
-        <div class="max-w-7xl mx-auto px-8">
-            <div class="text-center mb-12">
-                <span class="text-amber-400 text-sm tracking-widest">DON'T TAKE OUR WORD FOR IT</span>
-            </div>
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="bg-zinc-950 p-8 rounded-3xl border border-white/5">
-                    <p class="italic text-gray-300">"Fastest key purchase I've ever made. Delivered in under 3 seconds."</p>
-                    <div class="mt-8 flex items-center gap-x-3">
-                        <div class="w-9 h-9 bg-zinc-800 rounded-full"></div>
-                        <div>
-                            <div class="font-medium">@shadowbyte</div>
-                            <div class="text-xs text-gray-500">2 hours ago</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="bg-zinc-950 p-8 rounded-3xl border border-white/5">
-                    <p class="italic text-gray-300">"Clarity keys are always clean. Never had an issue."</p>
-                    <div class="mt-8 flex items-center gap-x-3">
-                        <div class="w-9 h-9 bg-zinc-800 rounded-full"></div>
-                        <div>
-                            <div class="font-medium">@neonvoid</div>
-                            <div class="text-xs text-gray-500">Yesterday</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="bg-zinc-950 p-8 rounded-3xl border border-white/5">
-                    <p class="italic text-gray-300">"Luxury experience for just $3. Insane value."</p>
-                    <div class="mt-8 flex items-center gap-x-3">
-                        <div class="w-9 h-9 bg-zinc-800 rounded-full"></div>
-                        <div>
-                            <div class="font-medium">@crypticx</div>
-                            <div class="text-xs text-gray-500">3 days ago</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Final CTA -->
-    <section class="py-32 border-t border-white/10 hero-bg">
-        <div class="max-w-4xl mx-auto text-center px-8">
-            <div class="text-6xl heading-font tracking-tighter mb-6">
-                Ready for Clarity?
-            </div>
-            <p class="text-2xl text-gray-400 mb-12">One click. One key. Instant access.</p>
+    <!-- Success Modal -->
+    <div id="successModal" class="hidden fixed inset-0 bg-black/90 flex items-center justify-center z-[110]">
+        <div class="modal bg-zinc-950 border border-emerald-400/30 rounded-3xl max-w-md w-full mx-4 p-10 text-center">
+            <i class="fa-solid fa-circle-check text-6xl text-emerald-400 mb-6"></i>
+            <h2 class="text-4xl heading-font mb-3">Payment Successful!</h2>
+            <p class="text-gray-400 mb-8">Your key has been delivered to your email.</p>
             
-            <button onclick="buyKey()" 
-                    class="buy-btn px-16 py-8 rounded-3xl text-3xl inline-flex items-center gap-x-6 hover:scale-105 transition">
-                <span>GET YOUR KEY • $3</span>
-                <i class="fa-solid fa-key"></i>
-            </button>
-            
-            <div class="mt-10 text-xs text-gray-500 flex items-center justify-center gap-x-8">
-                <div>🔒 Secure Payment</div>
-                <div>⚡ Powered by Junkie</div>
-                <div>♻️ Money Back Guarantee</div>
+            <div class="bg-black border border-white/10 rounded-2xl p-6 text-left font-mono text-sm mb-8">
+                <div class="text-amber-400 mb-1">YOUR KEY</div>
+                <div id="generatedKey" class="break-all">CLAR-8K9X-4P2M-V7QW-3R9T</div>
             </div>
+            
+            <button onclick="closeAllModals()" 
+                    class="w-full py-6 bg-white text-black rounded-2xl font-bold">DONE</button>
         </div>
-    </section>
+    </div>
 
-    <!-- Footer -->
-    <footer class="bg-black border-t border-white/10 py-12">
-        <div class="max-w-7xl mx-auto px-8 text-center text-xs text-gray-500">
-            © 2026 Clarity • All keys are digital products. No refunds after delivery.
+    <!-- Admin Panel -->
+    <div id="adminPanel" class="hidden fixed inset-0 bg-black/95 z-[200] flex items-center justify-center">
+        <div class="max-w-2xl w-full bg-zinc-950 border border-red-500/30 rounded-3xl p-8">
+            <div class="flex justify-between mb-8">
+                <h2 class="text-3xl heading-font text-red-400">Admin Dashboard</h2>
+                <button onclick="hideAdminPanel()" class="text-gray-400">✕</button>
+            </div>
+            
+            <div class="bg-black rounded-2xl p-6 mb-6">
+                <div class="flex justify-between text-sm mb-4">
+                    <span class="text-gray-400">Total Revenue</span>
+                    <span id="totalRevenue" class="text-4xl font-semibold">$0.00</span>
+                </div>
+                <div class="h-2 bg-zinc-800 rounded-full overflow-hidden">
+                    <div id="revenueBar" class="h-2 bg-gradient-to-r from-amber-400 to-yellow-400 w-0 transition-all"></div>
+                </div>
+            </div>
+            
+            <div class="text-xs uppercase tracking-widest text-gray-500 mb-3">Recent Sales</div>
+            <div id="salesList" class="space-y-3 text-sm">
+                <!-- Populated by JS -->
+            </div>
+            
+            <button onclick="hideAdminPanel()" 
+                    class="mt-8 w-full py-4 border border-white/30 hover:bg-white/5 rounded-2xl">Close Admin</button>
         </div>
-    </footer>
+    </div>
 
     <script>
-        function buyKey() {
+        let isLoggedIn = false;
+        let totalRevenue = 0;
+        let sales = [];
+
+        function showLoginModal() {
+            document.getElementById('checkoutModal').classList.remove('hidden');
+            resetSteps();
+        }
+
+        function closeModal() {
+            document.getElementById('checkoutModal').classList.add('hidden');
+        }
+
+        function closeAllModals() {
+            document.getElementById('checkoutModal').classList.add('hidden');
+            document.getElementById('successModal').classList.add('hidden');
+        }
+
+        function resetSteps() {
+            document.getElementById('step-login').classList.remove('hidden');
+            document.getElementById('step-info').classList.add('hidden');
+            document.getElementById('step-payment').classList.add('hidden');
+        }
+
+        function mockGoogleLogin() {
+            isLoggedIn = true;
+            document.getElementById('step-login').classList.add('hidden');
+            document.getElementById('step-info').classList.remove('hidden');
+            document.getElementById('loginBtn').innerHTML = `<i class="fa-solid fa-user"></i> Logged in`;
+        }
+
+        function nextStep() {
+            document.getElementById('step-info').classList.add('hidden');
+            document.getElementById('step-payment').classList.remove('hidden');
+        }
+
+        function startPurchase() {
+            if (!isLoggedIn) {
+                showLoginModal();
+            } else {
+                document.getElementById('checkoutModal').classList.remove('hidden');
+                document.getElementById('step-info').classList.remove('hidden');
+            }
+        }
+
+        function completePurchase() {
             const webhookUrl = "https://api.jnkie.com/api/v1/webhooks/execute/a9bec2b2-7cd1-4243-b42e-5f364d2ee120";
+            const email = document.getElementById('email').value || "demo@claritykeys.com";
             
-            // Show loading state
-            const btns = document.querySelectorAll('button');
-            btns.forEach(btn => {
-                if (btn.textContent.includes('$3')) {
-                    const originalText = btn.innerHTML;
-                    btn.innerHTML = `
-                        <span class="flex items-center gap-x-3">
-                            <i class="fa-solid fa-spinner fa-spin"></i>
-                            PROCESSING...
-                        </span>
-                    `;
-                    btn.disabled = true;
-                    
-                    // Call the webhook
-                    fetch(webhookUrl, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            product: "Clarity Premium Key",
-                            price: 3,
-                            timestamp: new Date().toISOString(),
-                            // Add any other metadata you want
-                        })
-                    })
-                    .then(response => {
-                        if (response.ok) {
-                            alert("✅ Payment initiated! Your key will be delivered instantly.");
-                            // You can redirect or show success modal here
-                        } else {
-                            alert("⚠️ Something went wrong. Please try again.");
-                        }
-                    })
-                    .catch(err => {
-                        console.error(err);
-                        alert("Connection error. Please try again.");
-                    })
-                    .finally(() => {
-                        // Reset button (in real use you might want to handle success state)
-                        setTimeout(() => {
-                            btn.innerHTML = originalText;
-                            btn.disabled = false;
-                        }, 3000);
-                    });
-                }
+            // Simulate processing
+            const payBtn = document.querySelector('#step-payment button');
+            const originalText = payBtn.innerHTML;
+            payBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> PROCESSING...`;
+            payBtn.disabled = true;
+
+            fetch(webhookUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    product: "Clarity Premium Key",
+                    price: 3.00,
+                    email: email,
+                    timestamp: new Date().toISOString()
+                })
+            })
+            .then(() => {
+                // Record sale
+                totalRevenue += 3;
+                document.getElementById('totalRevenue').textContent = '$' + totalRevenue.toFixed(2);
+                document.getElementById('revenueBar').style.width = Math.min((totalRevenue / 100) * 100, 100) + '%';
+
+                const key = "CLAR-" + Math.random().toString(36).substring(2,10).toUpperCase() + "-" + 
+                           Math.random().toString(36).substring(2,10).toUpperCase();
+                
+                sales.unshift({
+                    email: email,
+                    key: key,
+                    time: new Date().toLocaleTimeString()
+                });
+                
+                renderSales();
+                
+                // Show success
+                document.getElementById('generatedKey').textContent = key;
+                closeModal();
+                document.getElementById('successModal').classList.remove('hidden');
+            })
+            .catch(err => {
+                alert("Payment error. Demo mode – key still generated.");
+                const key = "CLAR-DEMO-KEY-" + Date.now();
+                document.getElementById('generatedKey').textContent = key;
+                closeModal();
+                document.getElementById('successModal').classList.remove('hidden');
             });
         }
 
-        // Tailwind script already included via CDN
-        console.log('%cClarity • Premium Keys Loaded', 'color:#d4af37; font-family:monospace; font-size:13px');
+        function renderSales() {
+            const container = document.getElementById('salesList');
+            container.innerHTML = '';
+            
+            sales.forEach(sale => {
+                const div = document.createElement('div');
+                div.className = "bg-zinc-900 rounded-2xl p-4 flex justify-between items-center";
+                div.innerHTML = `
+                    <div>
+                        <div class="text-xs text-gray-500">${sale.time}</div>
+                        <div class="font-medium">${sale.email}</div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-emerald-400 text-xs">+ $3</div>
+                        <div class="font-mono text-[10px] text-amber-300">${sale.key}</div>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function showAdminPanel() {
+            document.getElementById('adminPanel').classList.remove('hidden');
+        }
+
+        function hideAdminPanel() {
+            document.getElementById('adminPanel').classList.add('hidden');
+        }
+
+        // Secret admin access (press A three times)
+        let adminPressCount = 0;
+        document.addEventListener('keydown', function(e) {
+            if (e.key.toLowerCase() === 'a') {
+                adminPressCount++;
+                if (adminPressCount >= 3) {
+                    document.getElementById('adminBtn').classList.remove('hidden');
+                    adminPressCount = 0;
+                }
+            }
+        });
+
+        // Tailwind ready
+        console.log('%cClarity Checkout Ready • Luxury Edition', 'color:#d4af37; font-size:13px');
     </script>
 </body>
 </html>
